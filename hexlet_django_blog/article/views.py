@@ -1,6 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from hexlet_django_blog.article.apps import ArticleConfig
 
 
 def index(request):
-    return HttpResponse("article")
+    return render(
+        request,
+        "article/index.html",
+        context={
+            "app": ArticleConfig.name,
+        },
+    )
