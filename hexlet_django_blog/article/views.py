@@ -42,3 +42,26 @@ class ArticleFormCreateView(View):
             return redirect('article_index')
         messages.error(request, "The article wasn't added")
         return render(request, 'article/create.html', {'form': form})
+    
+
+class ArticleFormEditView(View):
+    def get(self, request, *args, **kwargs):
+        article_id = kwargs.get("id")
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(instance=article)
+        return render(
+            request, "article/update.html", {"form": form, "article_id": article_id}
+        )
+
+    def post(self, request, *args, **kwargs):
+        article_id = kwargs.get("id")
+        article = Article.objects.get(id=article_id)
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "The article was edited.")
+            return redirect('article_index')
+        messages.error(request, "The article wasn't edited")
+        return render(
+            request, "article/update.html", {"form": form, "article_id": article_id}
+        )
